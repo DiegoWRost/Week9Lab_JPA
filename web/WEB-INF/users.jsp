@@ -14,8 +14,6 @@
     </head>
 
     <body>
-
-
         <h1 class="ManageUsers">Manage Users</h1>
 
         <table style="width:50%">
@@ -27,35 +25,30 @@
                 <th>Edit </th>
                 <th>Delete</th>
             </tr>
-
             <c:forEach var="user" items="${users}">
-
-                <tr>
-                    <td>${user.email}</td>
-                    <td>${user.firstName}</td>
-                    <td>${user.lastName}</td>
-                    <td>${user.roleName}</td>
-                    <td> <form method="POST" action="user">
-                            <input type="hidden" name="action" value="edit">
-                            <input type="submit" value="edit">
-                            <input type="hidden" name="email" value="${user.email}">
-                        </form>
-
-                    </td>
-                    <td>
-
-                        <form method="POST" action="user">
-                            <input type="hidden" name=action value="delete">
-                            <input type="submit" value="delete">
-                            <input type="hidden" name="email" value="${user.email}">
-                        </form>
-
-                    </td>
-                    <td>Delete</td>
-                </tr>
-
+            <tr>
+                <td>${user.email}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.roleName}</td>
+                <td>
+                    <form method="POST" action="user">
+                        <input type="hidden" name="action" value="edit">
+                        <input type="submit" value="edit">
+                        <input type="hidden" name="email" value="${user.email}">
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="user">
+                        <input type="hidden" name=action value="delete">
+                        <input type="submit" value="delete">
+                        <input type="hidden" name="email" value="${user.email}">
+                    </form>
+                </td>
+            </tr>
             </c:forEach>
         </table>
+        
         <c:if test="${selectedUser == null}"> 
             <h1 class="adduser">Add Users</h1>
             <form action="user" method="POST">
