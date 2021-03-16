@@ -5,10 +5,8 @@
  */
 package dataaccess;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import models.Role;
 
 /**
@@ -22,22 +20,20 @@ public class RoleDB {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         
         try {
-            Query query = em.createQuery("SELECT r FROM Role r");
-            return (ArrayList<Role>) query.getResultList();
+            return em.createNamedQuery("Role.findAll", Role.class).getResultList();
         } finally {
             em.close();
         }
     }
     
     public int getRole (String roleName) {
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        
-        try {
-            Role role  = em.find(Role.class, roleName);
-            return role.getRoleId();
-        } finally {
-            em.close();
+        int roleId = 0;
+        switch (roleName.toLowerCase()) {
+            case "system admin" : roleId = 1; break;
+            case "regular user" : roleId = 2; break;
+            case "company admin" : roleId = 3; break;
         }
+        return roleId;
     }
     
     public String getRole (int roleID) {
@@ -46,6 +42,16 @@ public class RoleDB {
         try {
             Role role  = em.find(Role.class, roleID);
             return role.getRoleName();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Role getRoleObject (int roleId) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        try {
+            return em.find(Role.class, roleId);
         } finally {
             em.close();
         }

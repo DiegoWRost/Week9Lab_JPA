@@ -5,11 +5,9 @@
  */
 package dataaccess;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 import models.User;
 
 /**
@@ -18,12 +16,11 @@ import models.User;
  */
 public class UserDB {
     
-    public List<User> getAll() throws Exception {
+    public Collection<User> getAll() throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         
         try {
-            Query query = em.createQuery("SELECT u FROM User u");
-            return (ArrayList<User>) query.getResultList();
+            return em.createNamedQuery("User.findAll", User.class).getResultList();
         } finally {
             em.close();
         }
@@ -78,8 +75,7 @@ public class UserDB {
         try {
             User user = em.find(User.class, email);
             trans.begin();
-            em.remove(em.merge(user));
-            em.merge(user);
+            em.remove(user);
             trans.commit();
         } catch (Exception ex) {
             trans.rollback();

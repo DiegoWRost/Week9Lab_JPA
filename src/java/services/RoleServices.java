@@ -6,7 +6,6 @@
 package services;
 
 import java.util.List;
-import java.util.ArrayList;
 import models.Role;
 import dataaccess.RoleDB;
 import java.util.logging.Level;
@@ -22,15 +21,11 @@ public class RoleServices {
 
     }
 
-    public List<String> getAllRoles() {
-
+    public List<Role> getAllRoles() {
+        //TODO validation
         RoleDB roleDB = new RoleDB();
         try {
-            List<Role> allRoles = roleDB.getAll();
-            ArrayList<String> roles = new ArrayList<String>();
-            for (Role r : allRoles) {
-                roles.add(r.getRole());
-            }
+            return roleDB.getAll();
         } catch (Exception ex) {
             Logger.getLogger(RoleServices.class.getName()).log(Level.SEVERE, null, ex);
         }

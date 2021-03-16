@@ -1,7 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,9 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Role;
 import services.UserServices;
 import services.RoleServices;
-import models.Role;
 import models.User;
 
 /**
@@ -37,9 +37,9 @@ public class UserServlet extends HttpServlet {
         String lastName = request.getParameter("lname");
         String password = request.getParameter("password");
         String role = request.getParameter("domain");
-        int active = 0;
+        boolean active = false;
         if (request.getParameter("active") != null && request.getParameter("active").equals("on")) {
-            active = 1;
+            active = true;
         };
 
         String action = request.getParameter("action");
@@ -61,7 +61,7 @@ public class UserServlet extends HttpServlet {
                     }
                     break;
                 case "save":
-                    if (us.updateUser(email, firstName, lastName, password, role, active)) {
+                    if (us.updateUser(email, firstName, lastName, password)) {
                         message = "User updated";
                     } else {
                         message = "Could not update user";
@@ -91,10 +91,10 @@ public class UserServlet extends HttpServlet {
     protected void displayMainPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         UserServices us = new UserServices();
-        List<User> users = us.getAllUsers();
+        Collection<User> users = us.getAllUsers();
 
         RoleServices rs = new RoleServices();
-        List<String> roles = rs.getAllRoles();
+        List<Role> roles = rs.getAllRoles();
 
         request.setAttribute("users", users);
         request.setAttribute("roles", roles);
